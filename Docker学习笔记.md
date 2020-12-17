@@ -246,6 +246,133 @@ source /etc/profile
 # 在任意目录下输入docker-compose
 ```
 
+### 4.2、Docker-Compose管理MySQL和Tomcat容器
+
+> yml文件以key:value方式来指定配置信息
+>
+> 多个配置信息以换行+缩进的方式来区分
+>
+> 在docker-compose.yml中，不要使用制表符
+
+```yml
+version: '3.1'
+services:
+  mysql:             # 服务的名称
+    restart: always  # 代表只要docker启动，那么这个容器就一起启动
+    image: daocloud.io/library/mysql:5.7.4  # 指定镜像路径
+    container_name: mysql  # 指定容器名称
+    ports:
+      - 3306:3306  # 指定端口号的映射
+    environment:
+      MYSQL_ROOT_PASSWORD: root    # 指定MySQL的ROOT用户登录密码
+      TZ: Asia/Shanghai            # 指定时区
+    volumes:
+      - /opt/docker_mysql_tomcat/mysql_data:/var/lib/mysql    # 映射数据卷，宿主机路径:容器内路径
+  tomcat:
+    restart: always
+    image: daocloud.io/library/tomcat:8.5.15-jre8
+    container_name: tomcat
+    ports:
+      - 8080:8080
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - /opt/docker_mysql_tomcat/tomcat_webapps:/usr/local/tomcat/webapps
+      - /opt/docker_mysql_tomcat/tomcat_logs:/usr/local/tomcat/logs
+```
+
+### 4.3、使用docker-compose命令管理容器
+
+> 在使用docker-compose的命令时，默认会在当前目录下找docker-compose.yml文件
+
+```sh
+# 1. 基于docker-compose.yml启动管理的容器
+docker-compose up -d
+```
+
+---
+
+```sh
+# 2. 关闭并删除容器
+docker-compose down
+```
+
+---
+
+```sh
+# 3. 开启|关闭|重启已经存在的由docker-compose维护的容器
+docker-compose start|stop|restart
+```
+
+---
+
+```sh
+# 4. 查看由docker-compose管理的容器
+docker-compose ps
+```
+
+---
+
+```sh
+# 5. 查看日志
+docker-compose logs -f
+```
+
+### 4.4、docker-compose配置Dockerfile使用
+
+> 使用docker-compose.yml文件以及Dockerfile文件在生成自定义镜像的同事启动当前镜像，并且由docker-compose去管理容器
+
+[docker-compose.yml]()
+
+```yml
+# yml文件
+version: '3.1'
+services:
+  ssm:
+    restart: always
+    build:                    # 构建自定义镜像
+      context: ../            # 指定Dockerfile文件的所在路径,这里为上一级目录
+      dockerfile: Dockerfile  # 指定Dockerfile文件名称
+    image: ssm:1.0
+    container_name: ssm
+    ports:
+      - 8081:8080
+    environment:
+      TZ: Asia/Shanghai
+```
+
+[Dockerfile文件]()
+
+```yml
+from daocloud.io/library/tomcat:8.5.15-jre8
+copy ssm.war /usr/local/tomcat/webapps
+```
+
+---
+
+```sh
+# 可以直接启动基于docker-compose.yml以及Dockerfile文件构建的自定义镜像
+docker-compose up -d
+# 如果自定义镜像不存在，会创建一个自定义镜像，如果自定义镜像已存在，会直接运行这个自定义镜像
+# 也可以设置重新构建
+# 重新构建自定义镜像
+docker-compose build
+# 运行前，重新构建
+docker-compose up -d --build
+```
 
 
-## 五、Docker DI、CD
+
+## 五、Docker CI、CD
+
+> CI: Continuous Integration 持续集成
+>
+> CD: Continuous Delivery     持续交付
+
+### 5.1、持续集成
+
+> 要用到gitlab，在其上使用gitlab-runner
+
+### 5.2、持续交付
+
+> 要用到Jenkins
