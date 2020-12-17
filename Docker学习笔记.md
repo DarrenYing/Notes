@@ -178,13 +178,73 @@ docker volume ls
 docker volume rm 数据卷名称
 ```
 
+---
+
+```sh
+# 5. 应用数据卷
+# 当你映射数据卷时，如果数据卷不存在，Docker会自动创建
+# 这种方式会将容器内部自带的文件，存到默认的存放路径中(即/var/lib/docker/volumes/数据卷名称/_data)
+docker run -v 数据卷名称:容器内部的路径 镜像id
+# 直接指定一个路径作为数据卷的存放位置
+# 这种方式，所指定的路径下是空文件夹，需要手动添加内容
+docker run -v 路径:容器内部的路径 镜像id
+```
+
 
 
 ## 三、Docker自定义镜像
 
+> 中央仓库上的镜像，也是Docker用户上传的
+
+```sh
+# 1. 创建一个Dockerfile文件，并且指定自定义镜像信息。
+# Dcokerfile文件中常用的内容
+from: 指定当前自定义镜像依赖的环境
+copy: 将相对路径下的内容复制到自定义镜像中
+workdir: 声明镜像的默认工作目录
+cmd: 需要执行的命令(在workdir下执行的，cmd可以写多个，只以最后一个为准)
+# 举例，自定义一个tomcat镜像，并且将ssm.war部署到tomcat中
+from daocloud.io/library/tomcat:8.5.15-jre8
+copy ssm.war /usr/local/tomcat/webapps
+```
+
+---
+
+```sh
+# 2. 将准备好的Dockerfile和相应的文件拖拽到Linux操作系统中，通过Docker的命令制作镜像
+docker build -t 镜像名称:[tag] . # .表示当前目录
+```
+
 
 
 ## 四、Docker-Compose
+
+> 之前运行一个镜像，需要添加大量的参数
+>
+> 可以通过Docker-Compuse编写这些参数
+>
+> Docker-Compose可以帮助我们批量的管理容器
+>
+> 只需要通过一个docker-compose.yml文件去维护即可
+
+### 4.1、下载Docker-Compose
+
+```
+# 1. 去github搜索docker-compose
+https://github.com/docker/compose/release/download/1.24.1/docker-compose-Linux-x86_64
+# 2. 将下载好的文件，拖到Linux文件系统中
+# 3. 需要将DockerCompose文件的名称修改一下，赋予DockerCompose文件可执行的权限
+mv docker-compose-Linux-x86_64 docker-compose
+chmod 777 docker-compose
+# 4. 为方便后期操作，配置一个环境变量
+# 将docker-compose文件移动到/usr/local/bin，修改/etc/profile文件，将/usr/local/bin配置到PATH中
+mv docker-compose /usr/local/bin
+vi /etc/profile
+	export PATH=$JAVA_HOME:/usr/local/bin:$PATH
+source /etc/profile
+# 5. 测试
+# 在任意目录下输入docker-compose
+```
 
 
 
