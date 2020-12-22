@@ -25,7 +25,7 @@
 >    ```json
 >    {
 >    	"registry-mirrors": ["https://registry.docker-cn.com"],
->    	"insecure-regristries": ["ip:port"]
+>    	"insecure-registries": ["ip:port"]
 >    }
 >    
 >    systemctl darmon-reload
