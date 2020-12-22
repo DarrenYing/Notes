@@ -292,3 +292,22 @@ location / {
 
 
 ## 六、Nginx集群
+
+### 6.1、引言
+
+> 服务器和nginx都可能出现单点故障，需要通过集群解决
+>
+> 为了避免由于nginx的宕机，而导致整个程序的崩溃
+>
+> 准备多台nginx
+>
+> 准备keepalived，监听nginx的健康情况
+>
+> 准备haproxy，提供一个虚拟的路径，统一去接收用户请求
+
+[![rrAgxK.png](https://s3.ax1x.com/2020/12/22/rrAgxK.png)](https://imgchr.com/i/rrAgxK)
+
+### 6.2、具体搭建
+
+[![rrAr5R.png](https://s3.ax1x.com/2020/12/22/rrAr5R.png)](https://imgchr.com/i/rrAr5R)
+
