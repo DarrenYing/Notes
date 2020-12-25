@@ -136,6 +136,101 @@ append key value
 strlen key
 ```
 
+### 3.3、hash常用命令
+
+```sh
+# 1. 存储数据
+hset key field value
+
+# 2. 获取数据
+hget key field 
+
+# 3. 批量操作
+hmset key field value [field value ...]
+hmget key field [field ...]
+```
+
+---
+
+```sh
+# 4. 自增(increment可以为正，也可以为负)
+hincrby key field increment
+```
+
+---
+
+```sh
+# 5. 设置值(如果key-field不存在，则正常添加，如果存在，就跳过)
+hsetnx key field value
+
+# 6. 检查field是否存在
+hexists key field
+
+# 7. 删除key对应的field，可以删除多个
+hdel key field [field ...]
+```
+
+---
+
+```sh
+# 8. 获取当前hash结构中的全部field和value
+hgetall key # py: dict.items()
+
+# 9. 获取当前hash结构中的全部field
+hkeys key # py: dict.keys()
+
+# 10. 获取当前hash结构中的全部value
+hvals key # py: dict.vals()
+
+# 11. 获取当前hash结构中field的数量
+hlen key
+```
+
+### 3.4、list常用命令
+
+```sh
+# 1. 存储数据(从左侧插入，从右侧插入)
+lpush key value [value ...]
+rpush key value [value ...]
+
+# 2. 存储数据(如果key不存在或者key不是list结构，则跳过;无法批量操作)
+lpushx key value
+rpushx key value
+
+# 3. 存储数据(修改指定位置的数据)
+lset key index value
+```
+
+---
+
+```sh
+# 4. 弹栈方式获取数据
+lpop key
+rpop key
+
+# 5. 获取指定索引范围的数据(start从0开始，stop支持负数，如-1；两边都是闭)
+lrange key start stop
+
+# 6. 获取指定索引位置的数据
+lindex key index
+
+# 7. 获取整个列表的长度
+llen key
+```
+
+---
+
+```sh
+# 8. 删除列表中的数据(删除count个相应value值，count<0时，从右向左删除，count=0时删除全部数据)
+lrem key count value
+
+# 9. 保留列表中的数据
+ltrim key start stop
+
+# 10. 将list1中的队尾(最右)，插入到list2头部(最左)
+rpoplpush list1 list2
+```
+
 
 
 
