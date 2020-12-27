@@ -231,19 +231,161 @@ ltrim key start stop
 rpoplpush list1 list2
 ```
 
+### 3.5、set常用命令
 
+```sh
+# 1. 存储数据
+sadd key member [member ...]
 
+# 2. 获取数据（获取全部数据）
+smembers key
 
+# 3. 随机获取一个数据（获取的同时，移除数据，count默认为1，代表弹出数据的数量）
+spop key [count]
+```
 
+---
 
+```sh
+# 4. 交集
+sinter set1 set2 ...
 
+# 5. 并集
+sunion set1 set2 ...
 
+# 6. 差集(set1-set2-...)
+sdiff set1 set2 ...
+```
+
+---
+
+```sh
+# 7. 删除数据
+srem key member [member ...]
+
+# 8. 查看当前的set集合中是否包含这个值
+sismember key member
+```
+
+### 3.6、zset常用命令
+
+```sh
+# 1. 添加数据(score必须是数值，member不允许重复)
+zadd key score member [score member ...]
+
+# 2. 修改member的分数(如果member不存在，会先添加该member)
+zincrby key score member
+```
+
+---
+
+```sh
+# 3. 查看指定的member的分数
+zscore key member
+
+# 4. 获取zset中member的数量
+zcard key
+
+# 5. 根基score的范围查询member数量
+zcount key min max
+
+# 6. 删除zset中的成员
+zrem key member [member ...]
+```
+
+---
+
+```sh
+# 7. 根据分数从小到大排序，获取指定范围内的数据(withscore表示返回时，会返回member对应分数)
+zrange key start stop [withscores]
+
+# 8. 根据分数从大到小排序，获取指定范围内的数据
+zrevrange key start stop [withscores]
+
+# 9. 根据score的范围获取member(limit和MySQL中用法一致)
+zrangebyscore key min max [withscores] [limit offset count]
+
+# 10. 根据score的范围获取member
+zrevrangebyscore key max min [withscores] [limit offset count]
+
+# some examples
+zrangebyscore salary 3000 10000  # 左右都闭
+zrangebyscore salary (3000 10000 # 左开右闭
+zrangebyscore salary -inf +inf	 # 查询全部
+```
+
+### 3.7、key常用命令
+
+```sh
+# 1. 查看Redis中全部的key (pattern: *, xxx*, *xxx)
+ keys pattern
+ 
+ # 2. 查看某一个key是否存在(1-存在，0-不存在)
+ exists key
+ 
+ # 3. 删除key
+ del key [key ...]
+```
+
+---
+
+```sh
+# 4. 设置key的生存时间，单位为秒或毫秒
+expire key second
+pexpire key milliseconds
+
+# 5. 设置key的生存时刻，单位为秒或毫秒
+expireat key timestamp
+pexpireat key milliseconds-timestamp
+
+# 6. 查看key的剩余生存时间，单位为秒或毫秒(-2:当前key不存在，-1:key未设置生存时间)
+ttl key
+pttl key
+
+# 7. 移除key的生存时间(1-移除成功，0-key未设置生存时间或key不存在)
+persist key
+```
+
+---
+
+```sh
+# 8. 选择操作的库(redis默认有16个库，编号0-15，默认选择0号库)
+select 0-15
+
+# 9. 移动key到另一个库中
+move key db
+```
+
+### 3.8、库的常用命令
+
+```sh
+# 1. 清空当前所在的数据库
+flushdb
+
+# 2. 清空全部数据库
+flushall
+
+# 3. 查看当前数据库中有多少个key
+dbsize
+
+# 4. 查看最后一次操作的时间(准确说是最后一次操作磁盘的时间)
+lastsave
+
+# 5. 实时监控Redis服务接收到的操作命令
+monitor
+```
 
 ## 四、Java连接Redis
 
+> 通过Jedis连接和操作，操作完记得释放资源
+
+### 4.1、Jedis连接Redis
 
 
 
+### 4.2、Jedis如何存储一个对象到Redis
+
+> 以byte[]的形式存储，通过序列化和反序列化即可
 
 
 
