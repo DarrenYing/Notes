@@ -138,17 +138,89 @@ public class UserConfig {
 }
 ```
 
+### 3.2、@SpringBootApplication
 
+> @SpringBootApplication是一个组合注解，具体如下
 
+---
 
+> 1、@SpringBootConfiguration就是@Configuration注解，代表启动类就是一个配置类
 
+---
 
+> 2、@EnableAutoConfiguration帮助实现自动装配，当SpringBoot工程启动时，会运行一个SpringFactoriesLoader的类，加载META-INF/spring.factories配置类(已经开启的)，通过SpringFactoriesLoader中的load方法，以For循环的方式，逐个加载。
+>
+> 优点：无需编写大量的整合配置信息，只需要按照SpringBoot提供好的约定去整合即可
+>
+> 缺点：假设你导入了一个starter依赖，那么你就需要填写它必要的配置信息
+>
+> 手动关闭指定内容的自动装配：
+>
+> ​	以关闭Quartz为例：@SpringBootApplication(exclude = QuartzAutoConfiguration.class)
+
+---
+
+> 3、@ComponentScan就相当于<context:component-scan basePackage="包名" />，用于扫描注解
 
 ## 四、SpringBoot常用配置
 
+### 4.1、SpringBoot的配置文件格式
 
+> SpringBoot的配置文件支持properties和yml，还有json
+>
+> 推荐使用yml文件格式：
+>
+> 优势：
+>
+> 1. 可以根据换行和缩进帮助管理配置文件
+> 2. 相比properties更轻量
 
+### 4.2、多环境配置
 
+> 在application.yml文件中添加一个配置项：
+>
+> spring:
+>
+>   profiles:
+>
+> ​    active: 环境名
+
+---
+
+> 在resource目录下，创建多个application-环境名.yml文件即可
+>
+> 比如application-dev.yml，application-prod.yml
+
+---
+
+> 在部署工程时，通过 java -jar jar文件路径 --spring.profiles.active=环境名    即可指定部署时使用哪个环境
+
+### 4.3、引入外部配置文件信息
+
+> 和传统的SSM方式一样，通过@Value的注解去获取properties或yml配置文件中的内容
+
+----------------------------
+
+> 如果在yml配置文件中需要编写大量的自定义配置，并且具有统一的前缀时，采用如下方式
+
+```java
+@ConfigurationProperties(prefix="aliyun")
+@Component
+@Data
+public class AliyunProperties {
+    
+    private String xxxx;
+    ...
+        
+}
+```
+
+```yml
+# yml配置文件
+aliyun:
+  xxxx: some-content
+  ...
+```
 
 
 
