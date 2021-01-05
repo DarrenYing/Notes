@@ -222,13 +222,251 @@ aliyun:
   ...
 ```
 
+### 4.4、热加载
 
+> 1、导入依赖
 
+```xml
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-devtools</artifactId>
+	<optional>true</optional>
+</dependency>
+```
 
+> 2、修改settings中的配置
+
+![image-20210105102918651](C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210105102918651.png)
+
+> 3、修改内容后，直接build即可，不用重启项目工程
+
+![image-20210105102852930](C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210105102852930.png)
 
 ## 五、SpringBoot整合MyBatis
 
+> 1、导入依赖
 
+```xml
+<!--        MySQL驱动-->
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+</dependency>
+
+<!--        druid连接-->
+<dependency>
+    <groupId>com.alibaba</groupId>
+    <artifactId>druid-spring-boot-starter</artifactId>
+    <version>1.1.10</version>
+</dependency>
+
+<!--        mybatis-->
+<dependency>
+    <groupId>org.mybatis.spring.boot</groupId>
+    <artifactId>mybatis-spring-boot-starter</artifactId>
+    <version>1.3.2</version>
+</dependency>
+```
+
+
+
+> 2、编写配置文件
+>
+> 连接数据库，自动生成实体类
+
+![image-20210105110035154](C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210105110035154.png)
+
+```java
+// 自动生成实体类后，修改其包路径
+package com.example.demo01.entity;
+
+public class Difficultydegree {
+
+  private long difficultyId;
+  private String description;
+
+
+  public long getDifficultyId() {
+    return difficultyId;
+  }
+
+  public void setDifficultyId(long difficultyId) {
+    this.difficultyId = difficultyId;
+  }
+
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+}
+```
+
+---
+
+```java
+// 准备Mapper接口
+public interface DegreeMapper {
+
+    List<Difficultydegree> findAll();
+}
+
+// 在启动类中添加注解，扫描Mapper接口所在的包
+@MapperScan(basePackages = "com.example.demo01.mapper")
+```
+
+---
+
+```xml
+// 准备映射文件
+<mapper namespace="com.example.demo01.mapper.DegreeMapper">
+
+<!--    List<Difficultydegree> findAll();-->
+    <select id="findAll" resultType="Difficultydegree">
+        select * from difficultydegree
+    </select>
+
+</mapper>
+```
+
+```yml
+# 修改yml文件配置
+# mybatis配置
+mybatis:
+  mapper-locations: classpath:mapper/*.xml # 扫描映射文件
+  type-aliases-package: com.example.demo01.entity # 配置别名扫描的包
+  configuration:
+    map-underscore-to-camel-case: true # 开启驼峰映射配置
+    
+# 连接数据库的信息
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql///problemdatabase
+    username: root
+    password: root
+    type: com.alibaba.druid.pool.DruidDataSource
+```
+
+
+
+> 3、测试
+>
+> 进入mapper类文件，右键,goto-test，创建测试类
+
+```java
+class DegreeMapperTest extends Demo01ApplicationTests {
+
+    @Autowired
+    private DegreeMapper degreeMapper;
+
+    @Test
+    void findAll() {
+        List<Difficultydegree> list = degreeMapper.findAll();
+        for (Difficultydegree degree : list) {
+            System.out.println(degree);
+        }
+    }
+}
+```
+
+### 5.2、注解方式整合Mybatis
+
+> 1、创建Mapper接口
+
+```java
+public interface PTypeMapper {
+
+    List<Problemtype> findAll();
+
+}
+```
+
+> 2、添加Mybatis注解
+>
+> 针对增删改查：@Insert, @Delete, @Update, @Select
+>
+> 仍旧需要在启动类中添加@MapperScan注解
+
+```java
+@Select("select * from problemtype")
+List<Problemtype> findAll();
+
+@Select("select * from problemtype where id = #{id}")
+Problemtype selectById(@Param("id") Integer id);
+```
+
+> 3、测试，并显示执行的sql语句
+
+```yml
+# 设置显示执行的SQL语句
+logging:
+  level:
+    com.example.demo01.mapper: DEBUG
+```
+
+```java
+class PTypeMapperTest extends Demo01ApplicationTests {
+
+    @Autowired
+    private PTypeMapper mapper;
+
+    @Test
+    void findAll() {
+        List<Problemtype> list = mapper.findAll();
+        for (Problemtype problemtype : list) {
+            System.out.println(problemtype);
+        }
+    }
+
+    @Test
+    void selectById() {
+        Problemtype pt = mapper.selectById(2);
+        System.out.println(pt.getDescription());
+    }
+}
+```
+
+
+
+### 5.3、SpringBoot整合分页助手
+
+> 1、 导入依赖
+
+```xml
+<!--        PageHelper分页助手-->
+<dependency>
+    <groupId>com.github.pagehelper</groupId>
+    <artifactId>pagehelper-spring-boot-starter</artifactId>
+    <version>1.2.10</version>
+</dependency>
+```
+
+> 2、测试使用
+
+```java
+ @Test
+    public void findByPage() {
+        // 1、执行分页
+        PageHelper.startPage(1, 2);
+
+        // 2、执行查询
+        List<Difficultydegree> list = mapper.findAll();
+
+        // 3、封装PageInfo对象
+        PageInfo<Difficultydegree> pageinfo = new PageInfo<>(list);
+
+        // 4、输出结果
+        for (Difficultydegree difficultydegree : pageinfo.getList()) {
+            System.out.println(difficultydegree);
+        }
+
+    }
+```
 
 
 
