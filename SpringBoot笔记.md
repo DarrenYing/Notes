@@ -236,11 +236,11 @@ aliyun:
 
 > 2、修改settings中的配置
 
-![image-20210105102918651](C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210105102918651.png)
+![image-20210105102918651](https://i.loli.net/2021/01/11/2qXItiQKRgyDPEC.png)
 
 > 3、修改内容后，直接build即可，不用重启项目工程
 
-![image-20210105102852930](C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210105102852930.png)
+![image-20210105102852930.png](https://i.loli.net/2021/01/11/GbUZe9EkBnNAmph.png)
 
 ## 五、SpringBoot整合MyBatis
 
@@ -274,7 +274,7 @@ aliyun:
 >
 > 连接数据库，自动生成实体类
 
-![image-20210105110035154](C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210105110035154.png)
+![image-20210105110035154.png](https://i.loli.net/2021/01/11/g4J63LHXrhWCT8d.png)
 
 ```java
 // 自动生成实体类后，修改其包路径

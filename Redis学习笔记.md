@@ -8,7 +8,7 @@
 > 2. 多台服务器之间，数据不同步
 > 3. 多台服务器之间的锁， 已经不存在互斥性了
 
-![image-20201224092558107](C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20201224092558107.png)
+![image-20201224092558107](https://i.loli.net/2021/01/11/idh63Lbknmj2qfy.png)
 
 ### 1.2、NoSQL
 
@@ -80,7 +80,7 @@ services:
 >
 > BIT：通过byte数组来存储
 
-![image-20201224164949920](C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20201224164949920.png)
+![image-20201224164949920](https://i.loli.net/2021/01/11/NylaXLubBzjTF9h.png)
 
 > key-string：最常用，一般用于存储单个值
 >
@@ -393,7 +393,7 @@ monitor
 
 > 创建对象后转为json字符串，再存到Redis即可，取出时再由json转为对象
 
-![image-20201228094625249](C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20201228094625249.png)
+![image-20201228094625249](https://i.loli.net/2021/01/11/hHTdDFJiS3nVeN2.png)
 
 ### 4.4、使用Jedis连接池
 
@@ -407,7 +407,7 @@ monitor
 
 > 1、简单方式
 
-![image-20201228094853644](C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20201228094853644.png)
+![image-20201228094853644](https://i.loli.net/2021/01/11/Adr3VNDLJupiZeG.png)
 
 > 设置配置信息，再创建连接处
 >
@@ -415,7 +415,7 @@ monitor
 >
 > maxIdle通常和maxTotal设置为同一个值
 
-![image-20201228095634165](C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20201228095634165.png)
+![image-20201228095634165](https://i.loli.net/2021/01/11/7edR2cTolMJxgCv.png)
 
 其他步骤同上。
 
@@ -543,7 +543,7 @@ appendfsync no        # 根据系统环境不同，在一定时间内执行一�
 
 > 单个Redis存在读写瓶颈的问题
 
-![image-20201229102735599](C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20201229102735599.png)
+![image-20201229102735599](https://i.loli.net/2021/01/11/OJj9CDglnbN3X6t.png)
 
 ```yml
 version: '3.1'
@@ -680,7 +680,7 @@ redis-sentinel sentinel.conf
 >6. 可以单独地针对Redis集群中的某一个节点搭建主从
 >7. 当Redis集群中超过半数的节点宕机之后，Redis集群就瘫痪了
 
-![image-20201231094420587](C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20201231094420587.png)
+![image-20201231094420587](https://i.loli.net/2021/01/11/gbXpVMsNjJP7TFR.png)
 
 ```yml
 # docker-compose.yml
@@ -885,7 +885,7 @@ public void test(){
 > 2. 如果id不是整型，可以将全部的id放到set中，在用户查询时，在set中先查看是否有该id即可
 > 3. 获取客户端的ip地址，可以对ip添加访问限制 (比如限制1min内最多访问60次)
 
-![image-20201231102704386](C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20201231102704386.png)
+![image-20201231102704386](https://i.loli.net/2021/01/11/gbXpVMsNjJP7TFR.png)
 
 ---
 
